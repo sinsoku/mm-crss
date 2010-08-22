@@ -16,18 +16,19 @@
 #
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
-
+from mmcrss import MMCommentRSSHandler
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
         self.response.out.write('Hello world!')
 
 def application():
-    return webapp.WSGIApplication([('/', MainHandler)], debug=True)
+    pagelist = [('/', MainHandler),
+                ('/sinsoku', MMCommentRSSHandler)]
+    return webapp.WSGIApplication(pagelist, debug=True)
 
 def main():
     util.run_wsgi_app(application)
-
 
 if __name__ == '__main__':
     main()
