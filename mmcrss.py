@@ -37,7 +37,7 @@ class MMCommentRSS:
         parser = ExtractCommentParser()
         parser.feed(item.description)
 
-        return parser.getComment()
+        return parser.comment
 
 class MMCommentRSSHandler(webapp.RequestHandler):
     def get(self, user):

@@ -6,21 +6,16 @@ from HTMLParser import HTMLParser
 class ExtractCommentParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
-        self.datalist = []
+        self.isComment = False
+        self.comment = ''
 
     def handle_data(self, data):
-        data = data.strip(" \t\r\n")
-        if data:
-            self.datalist.append(data)
+        if self.isComment:
+            self.comment = data
+            self.isComment = False
 
-    def handle_starttag(self, tag, attrs):
-        pass
-
-    def handle_endtag(self, tag):
-        pass
-
-    def getComment(self):
-        if re.search('ISBN', self.datalist[7]) or re.search(u'詳細ページ', self.datalist[7]):
-            return ''
-        else:
-            return self.datalist[7]
+    def handle_startendtag(self, tag, attrs):
+        if tag == "img":
+            attrs = dict(attrs)
+            if "title" in attrs and u'コメント' == attrs['title']:
+                self.isComment = True
