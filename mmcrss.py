@@ -31,9 +31,9 @@ class MMCommentRSS:
         return feed.writeString('utf-8')
 
 class MMCommentRSSHandler(webapp.RequestHandler):
-    def get(self):
+    def get(self, user):
         mmcrss = MMCommentRSS()
-        mmcrss.read('http://mediamarker.net/u/sinsoku/rss')
+        mmcrss.read('http://mediamarker.net/u/%s/rss' % user)
 
         self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'
         self.response.out.write(mmcrss.tostr())

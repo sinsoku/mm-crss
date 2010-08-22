@@ -24,7 +24,7 @@ class MainHandler(webapp.RequestHandler):
 
 def application():
     pagelist = [('/', MainHandler),
-                ('/sinsoku', MMCommentRSSHandler)]
+                ('/(.*)', MMCommentRSSHandler)]
     return webapp.WSGIApplication(pagelist, debug=True)
 
 def main():
