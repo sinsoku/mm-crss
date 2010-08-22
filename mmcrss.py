@@ -26,7 +26,6 @@ class MMCommentRSS:
                 title = e.title,
                 link = e.link,
                 description = e.description,
-                category = e.category
             )
 
         return feed.writeString('utf-8')
