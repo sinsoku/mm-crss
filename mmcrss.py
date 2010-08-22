@@ -5,6 +5,7 @@ sys.path.append('feedparser-4.1.zip')
 import feedparser
 from google.appengine.ext import webapp
 from django.utils import feedgenerator
+from commentparser import ExtractCommentParser
 
 class MMCommentRSS:
     def __init__(self):
@@ -22,13 +23,21 @@ class MMCommentRSS:
             )
 
         for e in self.mmrss.entries:
-            feed.add_item(
-                title = e.title,
-                link = e.link,
-                description = e.description,
-            )
+            comment = self.getComment(e)
+            if comment :
+                feed.add_item(
+                    title = e.title,
+                    link = e.link,
+                    description = comment,
+                )
 
         return feed.writeString('utf-8')
+
+    def getComment(self, item):
+        parser = ExtractCommentParser()
+        parser.feed(item.description)
+
+        return parser.getComment()
 
 class MMCommentRSSHandler(webapp.RequestHandler):
     def get(self, user):
