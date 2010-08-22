@@ -28,7 +28,7 @@ def application():
     return webapp.WSGIApplication(pagelist, debug=True)
 
 def main():
-    util.run_wsgi_app(application)
+    util.run_wsgi_app(application())
 
 if __name__ == '__main__':
     main()
