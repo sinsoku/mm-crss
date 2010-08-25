@@ -20,7 +20,18 @@ from mmcrss import MMCommentRSSHandler
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write('Hello world!')
+        self.response.out.write("""
+        <html>
+            <body>
+                <form action="/" method="post">
+                    <div><input name="user" type="text" size="31"></div>
+                    <div><input type="submit" value="button"></div>
+                </from>
+            </body>
+        </html>""")
+
+    def post(self, *args):
+        self.redirect(self.request.get('user'))
 
 def application():
     pagelist = [('/', MainHandler),
