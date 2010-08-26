@@ -20,15 +20,12 @@ from mmcrss import MMCommentRSSHandler
 
 class MainHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write("""
-        <html>
-            <body>
-                <form action="/" method="post">
-                    <div><input name="user" type="text" size="31"></div>
-                    <div><input type="submit" value="button"></div>
-                </from>
-            </body>
-        </html>""")
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write('''<html><body>
+            <form action="/" method="post">
+                <input type="text" name="user">
+                <input type="submit" value="OK">
+            </from></body></html>''')
 
     def post(self, *args):
         self.redirect(self.request.get('user'))
