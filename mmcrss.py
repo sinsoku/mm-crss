@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-import sys
-sys.path.append('feedparser-4.1.zip')
-import feedparser
+from zipimport import zipimporter
 from google.appengine.ext import webapp
 from django.utils import feedgenerator
 from commentparser import ExtractCommentParser
+feedparser = zipimporter('feedparser-4.1.zip').load_module('feedparser')
 
 class MMCommentRSS:
     def __init__(self):
