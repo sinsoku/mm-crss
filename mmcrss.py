@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import datetime
 import httplib
 import re
 from HTMLParser import HTMLParser
@@ -41,12 +42,14 @@ class MMCommentRSS:
             )
 
         for e in self.mmrss.entries:
+            dtime = self.dtime_from_dtuple(e.updated_parsed)
             comment = self.getComment(e)
             if comment :
                 feed.add_item(
                     title = e.title,
                     link = e.link,
                     description = comment,
+                    pubdate=dtime
                 )
 
         return feed.writeString('utf-8')
@@ -56,6 +59,9 @@ class MMCommentRSS:
         parser.feed(item.description)
 
         return parser.comment
+
+    def dtime_from_dtuple(self, d):
+        return datetime.datetime(d[0], d[1], d[2], d[3], d[4], d[5], d[6])
 
 class MMCommentRSSHandler(webapp.RequestHandler):
     def get(self, user):
