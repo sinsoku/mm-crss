@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import httplib
 import re
 from HTMLParser import HTMLParser
 from zipimport import zipimporter
@@ -58,8 +59,19 @@ class MMCommentRSS:
 
 class MMCommentRSSHandler(webapp.RequestHandler):
     def get(self, user):
-        mmcrss = MMCommentRSS()
-        mmcrss.read('http://mediamarker.net/u/%s/rss' % user)
+        host = 'mediamarker.net'
+        url = '/u/%s/rss' % user
 
-        self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'
-        self.response.out.write(mmcrss.tostr())
+        # ユーザのRSSがあるかチェックする
+	conn = httplib.HTTPConnection(host)
+	conn.request('GET', url)
+	r = conn.getresponse()
+	if r.getheader('Content-Type') == 'text/html':
+            self.response.headers['Content-Type'] = 'text/html'
+            self.response.out.write('User Not Found')
+	else:
+            mmcrss = MMCommentRSS()
+            mmcrss.read('http://mediamarker.net/u/%s/rss' % user)
+
+            self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'
+            self.response.out.write(mmcrss.tostr())
