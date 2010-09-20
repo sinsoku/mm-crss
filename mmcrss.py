@@ -63,15 +63,17 @@ class MMCommentRSSHandler(webapp.RequestHandler):
         url = '/u/%s/rss' % user
 
         # ユーザのRSSがあるかチェックする
-	conn = httplib.HTTPConnection(host)
-	conn.request('GET', url)
-	r = conn.getresponse()
-	if r.getheader('Content-Type') == 'text/html':
+        conn = httplib.HTTPConnection(host)
+        conn.request('GET', url)
+        r = conn.getresponse()
+
+        if r.getheader('Content-Type') == 'text/html':
+            # RSS(xml)がない場合は'User Not Found'を表示する
             self.response.headers['Content-Type'] = 'text/html'
             self.response.out.write('User Not Found')
-	else:
+        else:
+            # RSSがあれば、コメントのあるRSSのみ抽出して再表示する
             mmcrss = MMCommentRSS()
-            mmcrss.read('http://mediamarker.net/u/%s/rss' % user)
-
+            mmcrss.read('http://' + host + url)
             self.response.headers['Content-Type'] = 'text/xml; charset=utf-8'
             self.response.out.write(mmcrss.tostr())
