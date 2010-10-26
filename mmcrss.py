@@ -11,6 +11,7 @@ from django.utils import feedgenerator
 feedparser_path = os.path.join('lib', 'feedparser-4.1.zip')
 feedparser = zipimporter(feedparser_path).load_module('feedparser')
 
+
 class ExtractCommentParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
@@ -28,6 +29,7 @@ class ExtractCommentParser(HTMLParser):
             if "title" in attrs and u'コメント' == attrs['title']:
                 self.isComment = True
 
+
 class MMCommentRSS:
     def __init__(self):
         pass
@@ -37,20 +39,20 @@ class MMCommentRSS:
 
     def tostr(self):
         feed = feedgenerator.Rss201rev2Feed(
-                title = self.mmrss.feed.title,
-                link  = self.mmrss.feed.link,
-                description = self.mmrss.feed.description,
-                language = self.mmrss.feed.language
+                title=self.mmrss.feed.title,
+                link=self.mmrss.feed.link,
+                description=self.mmrss.feed.description,
+                language=self.mmrss.feed.language
             )
 
         for e in self.mmrss.entries:
             dtime = self.dtime_from_dtuple(e.updated_parsed)
             comment = self.getComment(e)
-            if comment :
+            if comment:
                 feed.add_item(
-                    title = e.title,
-                    link = e.link,
-                    description = comment,
+                    title=e.title,
+                    link=e.link,
+                    description=comment,
                     pubdate=dtime
                 )
 
@@ -64,6 +66,7 @@ class MMCommentRSS:
 
     def dtime_from_dtuple(self, d):
         return datetime.datetime(d[0], d[1], d[2], d[3], d[4], d[5], d[6])
+
 
 class MMCommentRSSHandler(webapp.RequestHandler):
     def get(self, user):

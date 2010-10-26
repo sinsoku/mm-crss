@@ -18,6 +18,7 @@ from google.appengine.ext import webapp
 from google.appengine.ext.webapp import util
 from mmcrss import MMCommentRSSHandler
 
+
 class MainHandler(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
@@ -30,10 +31,12 @@ class MainHandler(webapp.RequestHandler):
     def post(self, *args):
         self.redirect(self.request.get('user'))
 
+
 def application():
     pagelist = [('/', MainHandler),
                 ('/(.*)', MMCommentRSSHandler)]
     return webapp.WSGIApplication(pagelist, debug=True)
+
 
 def main():
     util.run_wsgi_app(application())
