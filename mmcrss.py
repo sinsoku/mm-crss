@@ -3,11 +3,13 @@
 import datetime
 import httplib
 import re
+import os
 from HTMLParser import HTMLParser
 from zipimport import zipimporter
 from google.appengine.ext import webapp
 from django.utils import feedgenerator
-feedparser = zipimporter('feedparser-4.1.zip').load_module('feedparser')
+feedparser_path = os.path.join('lib', 'feedparser-4.1.zip')
+feedparser = zipimporter(feedparser_path).load_module('feedparser')
 
 class ExtractCommentParser(HTMLParser):
     def __init__(self):
